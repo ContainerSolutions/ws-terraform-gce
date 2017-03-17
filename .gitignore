@@ -1,0 +1,5 @@
+# Ignore Credentials
+/credentials/
+
+# Ignore Terraform state files
+/terraform.tfstate*
