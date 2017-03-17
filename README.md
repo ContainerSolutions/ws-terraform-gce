@@ -4,7 +4,7 @@
 
 ### ¿En dónde está la documentación de Terraform?
 
-### Checklist
+### Arando el terreno
 - [ ] La cuenta de Google Cloud ha sido creada
 - [ ] La Service Account para Terraform ha sido creada
 - [ ] Los permisos para la Service Account de Terraform han sido asignados
@@ -42,7 +42,7 @@ crear un plan de ejecución y aplicarlo.
 
 1. Crear un archivo de configuración de Terraform llamado `main.tf` en el que definamos
      - Un bloque de proveedor de Google
-     - Un recurso `google_project`
+     - Un recurso `google_compute_instance`
 
 2. En consola
    ```
@@ -57,7 +57,8 @@ crear un plan de ejecución y aplicarlo.
 
 4. Analizar el archivo `terraform.tfstate`
 
-5. Hacer algún cambio en la definición del `google_project` y aplicar los cambios
+5. Hacer algún cambio en la definición del `google_compute_instance` y aplicar los cambios.
+   Analizar que hay cambios que hacen que el recurso se recreado
 
 ## Ejercicio #2
 Objetivo: aprender que no importa en dónde se definan los recursos en Terraform,
@@ -75,25 +76,9 @@ Terraform hala todo lo que haya en un directorio.
    ```
    $ terraform apply
    ```
-4.  Renombrar el archivo `main.tf` a `projects.tf`
+4.  Renombrar el archivo `main.tf` a `compute_instances.tf` y verificar con `terraform plan`
 
 ## Ejercicio #3
-Objectivo: Crear una **Compute Instance** en Google Cloud
-
-1. Definir la configuración del recurso `google_compute_instance` en un archivo
-   llamado `compute_instances.tf`
-
-2. En consola
-   ```
-   $ terraform plan
-   ```
-
-3. En consola
-   ```
-   $ terraform apply
-   ```
-
-## Ejercicio #4
 Objetivo: Destruir recursos en Google Cloud
 
 1. En consola
@@ -102,9 +87,9 @@ Objetivo: Destruir recursos en Google Cloud
      $ terraform destroy
      ```
 
-## Ejercicio #5
+## Ejercicio #4
 Objetivo: Crear una **Compute Instance** en Google Cloud, usando un environment name
-como prefijo usando variables. E.g., el nombre de la instancia debería ser `dev-ayylmao001`.
+como prefijo usando variables. E.g., el nombre de la instancia debería ser `dev-web001`.
 
 1. Escribir la definición del recurso en el archivo `compute_instances.tf` con el nombre del environment
    quemado en el código
@@ -124,15 +109,14 @@ como prefijo usando variables. E.g., el nombre de la instancia debería ser `dev
    $ terraform apply
    ```
 
-4. Crear un archivo llamado `vars.tf` y definir ahí la variable `env`
+4. Crear un archivo llamado `vars.tf` y definir ahí la variable `environment`
    ```
-   variable "env" {
-      default = "dev"
-      description = "some useful description"
+   variable "environment" {
+      description = "The target environment that we're targetting with this Terraform plan"
    }
    ```
 
-5. Interpolar la variable `env` en el nombre de la **Compute Instance** en el
+5. Interpolar la variable `environment` en el nombre de la **Compute Instance** en el
    archivo `compute_instances.tf`
    ```
    resource "google_compute_instance" "web" {
@@ -150,7 +134,7 @@ como prefijo usando variables. E.g., el nombre de la instancia debería ser `dev
    $ terraform apply
    ```
 
-## Ejercicio #6
+## Ejercicio #5
 Objetivo: Crear múltiples instancias de **Compute Instance** en Google Cloud usando la variable
 especial `count`.
 
@@ -160,12 +144,22 @@ especial `count`.
 
 3. Sacar el valor del campo `count` de una variable definida en el archivo `vars.tf`
 
-## Ejercicio #7
-Objetivo: Crear recursos que tengan dependencias en otros recursos a.k.a. crear recursos
-que dependenan de otros recursos. Por ejemplo: `google_project` con `google_compute_instance`.
+## Ejercicio #6
+Objetivo: aprender sobre dependencias en Terraform. Crear Networks y Firewalls y asociarlos
+a las Compute Instances que hemos creado en los anteriores ejercicios.
+
+1. Crear una Network en Google Cloud  
+   Importante: `auto_create_subnetworks = true`
+2. Crear una Firewall en Google Cloud. Allow incoming ping, SSH, HTTP & HTTPS traffic.
+   Para el campo `network` del `google_compute_firewall`, halar el nombre de la network con
+   `${google_compute_firewall.the-resource.name}` syntax.
+
+Explicar cómo funciona el Resource Graph de Terraform.
 
 # Resumen
 
 # Recursos
 - [Machine Types de la Google Cloud](https://cloud.google.com/compute/docs/machine-types)
 - [Regiones y Zonas de la Google Cloud](https://cloud.google.com/compute/docs/regions-zones/regions-zones)
+- [Documentación de Terraform](https://www.terraform.io/docs/index.html)
+- [Documentación del proveedor de Google Cloud para Terraform](https://www.terraform.io/docs/providers/google/index.html)
