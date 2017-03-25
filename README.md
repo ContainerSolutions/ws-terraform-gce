@@ -61,6 +61,15 @@ crear un plan de ejecución y aplicarlo.
    Analizar que hay cambios que hacen que el recurso se recreado
 
 ## Ejercicio #2
+Objetivo: Destruir recursos en Google Cloud
+
+1. En consola
+
+     ```
+     $ terraform destroy
+     ```
+
+## Ejercicio #3
 Objetivo: aprender que no importa en dónde se definan los recursos en Terraform,
 Terraform hala todo lo que haya en un directorio.
 
@@ -77,15 +86,6 @@ Terraform hala todo lo que haya en un directorio.
    $ terraform apply
    ```
 4.  Renombrar el archivo `main.tf` a `compute_instances.tf` y verificar con `terraform plan`
-
-## Ejercicio #3
-Objetivo: Destruir recursos en Google Cloud
-
-1. En consola
-
-     ```
-     $ terraform destroy
-     ```
 
 ## Ejercicio #4
 Objetivo: Crear una **Compute Instance** en Google Cloud, usando un environment name
